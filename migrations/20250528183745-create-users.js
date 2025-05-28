@@ -24,16 +24,16 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      // role_id: {
-      //   type: Sequelize.UUID,
-      //   allowNull: true,
-      //   references: {
-      //     model: ',
-      //     key: 'id',
-      //   },
-      //   onDelete: 'CASCADE',
+      role_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       
-      // },
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
