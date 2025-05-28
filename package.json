@@ -4,18 +4,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "migrate": "export NODE_ENV=development && sequelize-cli db:migrate",
+    "migrate:undo": "export NODE_ENV=development && sequelize-cli db:migrate:undo",
+    "migrate:undo:all": "export NODE_ENV=development && sequelize-cli db:migrate:undo:all",
+    "seed": "export NODE_ENV=development && sequelize-cli db:seed:all",
+    "seed:undo": "export NODE_ENV=development && sequelize-cli db:seed:undo:all"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mysql2": "^3.14.0",
     "sequelize": "^6.37.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.3"
   }
 }
