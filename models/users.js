@@ -4,7 +4,18 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 import bcrypt from 'bcrypt';
 
-class Users extends Model { }
+class Users extends Model {
+  async comparePassword(candidatePassword) {
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+        if (err) return reject(err);
+        if (!isMatch) return resolve(false);
+        resolve(true);
+      });
+    });
+  }
+}
+
 
 Users.init(
   {
@@ -55,8 +66,7 @@ Users.init(
     sequelize,
     modelName: 'Users',
     tableName: 'users',
-    timestamps: true,
-    created_at: 'created_at',
+     created_at: 'created_at',
     updated_at: 'updated_at',
   }
 );
