@@ -2,9 +2,9 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
-class Roles extends Model { }
+class Projects extends Model { }
 
-Roles.init(
+Projects.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -30,15 +30,15 @@ Roles.init(
   },
   {
     sequelize,
-    modelName: 'Roles',
-    tableName: 'roles',
+    modelName: 'Projects',
+    tableName: 'projects',
     timestamps: true,
     created_at: 'created_at',
     updated_at: 'updated_at',
   }
 );
-Roles.associate = models => {
-  Roles.hasMany(models.Users, { as: 'users', foreignKey: 'role_id' });
+Projects.associate = models => {
+  Projects.hasMany(models.EngineeringLogs, {as: 'engineering_logs', foreignKey: 'project_id' });
 };
 
-export default Roles;
+export default Projects;

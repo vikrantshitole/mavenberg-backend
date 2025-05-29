@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
       },
       sales_amount: {
-        type: Sequelize.STRING
+        type: Sequelize.FLOAT
       },
       date: {
         type: Sequelize.DATE

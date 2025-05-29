@@ -16,18 +16,10 @@ Users.init(
     first_name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [1, 255],
-      },
     },
     last_name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [1, 255],
-      },
     },
     email: {
       type: DataTypes.STRING,
@@ -42,7 +34,7 @@ Users.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    role_id:{
+    role_id: {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
@@ -64,25 +56,31 @@ Users.init(
     modelName: 'Users',
     tableName: 'users',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
   }
 );
- // Hash password on individual create
- Users.beforeCreate(async (user) => {
+// Hash password on individual create
+Users.beforeCreate(async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });
 
 // Hash passwords on bulk create
 Users.beforeBulkCreate(async (users, options) => {
   const saltRounds = 10;
+  console.log('users', users);
+
   for (const user of users) {
+
     if (user.password) {
       user.password = await bcrypt.hash(user.password, saltRounds);
     }
   }
 });
+
 Users.associate = models => {
   Users.belongsTo(models.Roles, { as: 'role', foreignKey: 'role_id' });
+  Users.hasMany(models.Sales, { as: 'sales', foreignKey: 'user_id' });
+  Users.hasMany(models.EngineeringLogs, { as: 'engineering_logs', foreignKey: 'user_id' });
 };
 export default Users;
