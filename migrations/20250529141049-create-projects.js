@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Roles', {
+    await queryInterface.createTable('Projects', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('(UUID())'), // Note: needs parentheses
@@ -22,10 +22,8 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       }
     });
-    await queryInterface.addIndex('Roles', ['name']);
-    // await queryInterface.addIndex('Roles', ['alias']);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Roles');
+    await queryInterface.dropTable('Projects');
   }
 };

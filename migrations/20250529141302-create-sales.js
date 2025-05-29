@@ -2,32 +2,43 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Sales', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('(UUID())'), // Note: needs parentheses
         primaryKey: true,
       },
-      first_name: {
+      sales_amount: {
         type: Sequelize.STRING
       },
-      last_name: {
-        type: Sequelize.STRING
+      date: {
+        type: Sequelize.DATE
       },
-      email: {
-        type: Sequelize.STRING
-      },
-      phone_number: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      role_id: {
+      user_id: {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: 'roles',
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      
+      },
+      region_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'regions',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      
+      },
+      status_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'statuses',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -43,11 +54,14 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       }
-  });
-  await queryInterface.addIndex('Users', ['role_id']);
+    });
+    await queryInterface.addIndex('Sales', ['status_id']);
+    await queryInterface.addIndex('Sales', ['region_id']);
+    await queryInterface.addIndex('Sales', ['user_id']);
+    // await queryInterface.addIndex('Sales', ['sale_id']);
 
-},
+  },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Sales');
   }
 };
