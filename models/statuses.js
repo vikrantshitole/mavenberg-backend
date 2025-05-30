@@ -39,7 +39,7 @@ Statuses.init(
 );
 Statuses.associate = models => {
   Statuses.hasMany(models.Sales, {as:'sales', foreignKey: 'status_id' });
-  Statuses.hasMany(models.EngineeringLogs, {as:'engineering_logs', foreignKey: 'status_id' });
+  Statuses.hasMany(models.EngineeringLogs, { as: 'engineering_logs', foreignKey: 'status_id' });
   };
 
 export default Statuses;

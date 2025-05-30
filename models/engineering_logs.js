@@ -1,8 +1,8 @@
-'use strict';
+// models/engineering-logs.js
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
-class EngineeringLogs extends Model { }
+class EngineeringLogs extends Model {}
 
 EngineeringLogs.init(
   {
@@ -65,18 +65,20 @@ EngineeringLogs.init(
   },
   {
     sequelize,
-    modelName: 'Engineering_logs',
-    tableName: 'Engineering_logs',
+    modelName : 'EngineeringLogs',      // PascalCase for the JS class
+    tableName : 'engineering_logs',     // EXACT table name in MySQL
     timestamps: true,
-    created_at: 'created_at',
-    updated_at: 'updated_at',
+    createdAt : 'created_at',           // <-- correct timestamp option names
+    updatedAt : 'updated_at',
   }
 );
+
+// ---- ASSOCIATIONS ----
 EngineeringLogs.associate = models => {
-  EngineeringLogs.belongsTo(models.Users, { as: 'users', foreignKey: 'id' });
-  EngineeringLogs.belongsTo(models.Regions, { as: 'regions', foreignKey: 'id' });
-  EngineeringLogs.belongsTo(models.Statuses, { as: 'status', foreignKey: 'id' });
-  EngineeringLogs.belongsTo(models.Projects, { as: 'project', foreignKey: 'id' });
+  EngineeringLogs.belongsTo(models.Users,   { as: 'user',    foreignKey: 'user_id'   });
+  EngineeringLogs.belongsTo(models.Regions, { as: 'region',  foreignKey: 'region_id' });
+  EngineeringLogs.belongsTo(models.Statuses,{ as: 'status',  foreignKey: 'status_id' });
+  EngineeringLogs.belongsTo(models.Projects,{ as: 'project', foreignKey: 'project_id'});
 };
 
 export default EngineeringLogs;
