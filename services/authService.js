@@ -22,6 +22,6 @@ export const login = async (email, password, role_id) => {
         throw new Error("Invalid username or role_id or password");
     }
 
-    const token = jwt.sign({ userId: user._id, }, 'MY_SECRET_KEY');
+    const token = jwt.sign({ userId: user.id, }, 'MY_SECRET_KEY');
     return { message: "User logged in successfully", user: user, token: token };
 }
