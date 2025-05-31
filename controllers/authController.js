@@ -2,12 +2,12 @@ import * as authService from '../services/authService.js';
 import { getUserById } from '../services/userService.js';
 import jwt from 'jsonwebtoken';
 export const login = async(req,res,next) => {
-    const { email, password, role_id } = req.body;
-    if (!email || !password || !role_id) {
-        return res.status(400).json({ error: "Email, password, and role_id are required" });
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email, and password are required" });
     }
     try {
-        const response = await authService.login(email, password, role_id);
+        const response = await authService.login(email, password);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);

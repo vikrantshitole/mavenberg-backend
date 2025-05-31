@@ -17,8 +17,8 @@ export const getSalesVsEngineeringLogsData = async(req, res) => {
         let response = {};
         if (user.role.name === 'Admin') {
             const [line_chart,bar_chart,pie_chart] = await Promise.all([userService.getSalesVsEngineeringLogsData(),userService.getSalesVsEngineeringLogsRegionData(),userService.getSalesVsEngineeringLogsStatusData()]); // Fetch the sales vs engineering logs data
-            response = {line_chart,bar_chart,pie_chart};
-        }else if (user.role.name === 'Sales') {
+            response = {line_chart: {name: 'Combined Sales vs Engineering Activity Over Time', data: line_chart}, pie_chart: {name: "Overall Status Distribution",data: pie_chart}, bar_chart: {name: 'Region-wise Performance Breakdown', data: bar_chart} };
+        }else if (user.role.name === 'Sales') {            
             const {line_chart,bar_chart,pie_chart} = await userService.getSalesData()
             response = {line_chart,bar_chart,pie_chart};
         } else if (user.role.name === 'Engineering') {

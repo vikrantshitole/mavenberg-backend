@@ -2,12 +2,10 @@ import Roles from "../models/roles.js";
 import Users from "../models/users.js";
 import jwt from "jsonwebtoken";
 
-export const login = async (email, password, role_id) => {
-    if (!email || !password || !role_id) {
-        throw new Error("Username, password, and role_id are required");
-    }
+export const login = async (email, password) => {
+    
     const user = await Users.findOne({
-        where: { email, role_id , password},
+        where: { email, password},
         attributes: ['id', 'first_name', 'last_name', 'email', 'phone_number', 'role_id'],
         include: [
             {

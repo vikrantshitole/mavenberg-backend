@@ -6,33 +6,29 @@ import Statuses from "../models/statuses.js";
 export const getSalesMonthWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
-            [sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'), 'period'],
+            [sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'), 'name'],
             [sequelize.fn('COUNT', sequelize.col('id')), 'sales']
         ],
-        group: ['period'],
-        order: [['period', 'ASC']], // Ensure the periods are in ascending order
+        group: sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'),
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }
+
 export const getSalesRegionWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
             'region_id',
-            [sequelize.fn('COUNT', sequelize.col('*')), 'total'],
-
-            [sequelize.col('region.id'), 'region.id'],
-            [sequelize.col('region.name'), 'region.name']
-
+            [sequelize.fn('COUNT', sequelize.col('region.id')), 'total'],
+            [sequelize.col('region.name'), 'name']
         ],
-        group: ['sales.region_id'],
-        include: [
-            {
-                model: Regions, // Assuming you have a Regions model
-                as: 'region', // Adjust the alias based on your association
-                attributes: [] // Adjust attributes based on your Region model
-            }
-        ],
-        order: [['region.name', 'ASC']], // Order by region name
+        include: [{
+            model: Regions,
+            as: 'region',
+            attributes: []
+        }],
+        group: ['region_id', 'region.name'],
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }
@@ -41,64 +37,64 @@ export const getSalesStatusWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
             'status_id',
+            [sequelize.col('status.name'), 'name'],
+            [sequelize.fn('COUNT', sequelize.col('status_id')), 'total']
         ],
-        include: [
-            {
-                model: Statuses, // Assuming you have a Statuses model
-                as: 'status', // Adjust the alias based on your association
-                attributes: ['id', 'name'] // Adjust attributes based on your Status model
-            }
-        ],
-        order: [['status.name', 'ASC']], // Order by status name
+        include: [{
+            model: Statuses,
+            as: 'status',
+            attributes: []
+        }],
+        group: ['status_id', 'status.name'],
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }
+
 export const getSalesAmountRegionWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
             'region_id',
-            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'total_sales'],
-            [sequelize.col('region.id'), 'region.id'],
-            [sequelize.col('region.name'), 'region.name']
+            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'sales'],
+            [sequelize.col('region.name'), 'name']
         ],
-        include: [
-            {
-                model: Regions,
-                as: 'region',
-                attributes: []
-            }
-        ],
-        group: ['sales.region_id', 'region.id'], // <-- include all non-aggregated select columns here
-        order: [['region.name', 'ASC']], // Order by region name
+        include: [{
+            model: Regions,
+            as: 'region',
+            attributes: []
+        }],
+        group: ['region_id', 'region.name'],
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }
+
 export const getSalesAmountStatusWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
             'status_id',
-            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'total_sales']
+            [sequelize.col('status.name'), 'name'],
+            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'total']
         ],
-        include: [
-            {
-                model: Statuses,
-                as: 'status',
-                attributes: ['id', 'name']
-            }
-        ],
-        group: ['sales.status_id', 'status.id'], // <-- include all non-aggregated select columns here
-        order: [['status.name', 'ASC']], // Order by status name
+        include: [{
+            model: Statuses,
+            as: 'status',
+            attributes: []
+        }],
+        group: ['status_id', 'status.name'],
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }
+
 export const getSalesAmountMonthWiseData = async (user) => {
     return Sales.findAll({
         attributes: [
-            [sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'), 'period'],
-            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'total_sales']
+            [sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'), 'name'],
+            [sequelize.fn('SUM', sequelize.col('sales_amount')), 'sales']
         ],
-        group: ['period'],
-        order: [['period', 'ASC']], // Ensure the periods are in ascending order
+        group: sequelize.fn('DATE_FORMAT', sequelize.col('date'), '%Y-%m'),
+        order: sequelize.literal('name ASC'),
         raw: true
     });
 }

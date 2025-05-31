@@ -2,14 +2,14 @@ import express from "express";
 import { sequelize } from './models/index.js';
 import bodyParser from "body-parser";
 import routes from './routes/index.js';
-
+import cors from 'cors';
 const app = express();
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api',routes)
