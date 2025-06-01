@@ -135,7 +135,7 @@ export const getSalesData = async (user) => {
         }
 
         return {
-            line_chart: { name: 'Sales Trend Over Time', data: line_chart },
+            line_chart: { name: 'Sales Trend Over Time', data: line_chart.map(({name,sales}) => ({name,sales:sales.toFixed(2)})) },
             pie_chart: { name: "Status Distribution of Sales", data: pie_chart },
             bar_chart: { name: 'Total Sales by Region', data: bar_chart }
         };
