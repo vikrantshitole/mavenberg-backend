@@ -17,9 +17,13 @@ export const login = async (email, password) => {
 
     });
     if (!user) {
-        throw new Error("Invalid username or role_id or password");
+        throw {
+            statusCode: 400,
+            code: 'INVALID_CREDENTIALS',
+            message: 'Invalid email or password. Please provide correct email and password!'
+        };
     }
 
-    const token = jwt.sign({ userId: user.id, }, 'MY_SECRET_KEY');
+    const token = jwt.sign({ userId: user.id, }, process.env.JWT_SECRET);
     return { message: "User logged in successfully", user: user, token: token };
 }

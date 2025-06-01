@@ -3,6 +3,9 @@ import { sequelize } from './models/index.js';
 import bodyParser from "body-parser";
 import routes from './routes/index.js';
 import cors from 'cors';
+import { configDotenv } from "dotenv";
+import errorHandler from "./middleware/errorHandler.js";
+configDotenv()
 const app = express();
 app.use(bodyParser.json());
 
@@ -13,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api',routes)
-
+app.use(errorHandler)
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {

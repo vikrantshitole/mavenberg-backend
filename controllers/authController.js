@@ -4,15 +4,24 @@ import jwt from 'jsonwebtoken';
 export const login = async(req,res,next) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ error: "Email, and password are required" });
+        throw {
+          status: 'error',
+          statusCode : 400,
+          code: 'INVALID_PAYLOAD',
+          message: 'Email and password are required'
+        }
     }
     try {
         const response = await authService.login(email, password);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
-        
+        next({
+          status: 'error',
+          statusCode: error.statusCode || 500,
+          code: error.code || "INTERNAL_SERVER_ERROR",
+          message: error.message || 'Server Error'
+        })        
     }
 
 }
@@ -80,7 +89,7 @@ export const verifyToken = (token) => {
       };
     }
 
-    const decoded = jwt.verify(token, 'MY_SECRET_KEY');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded || !decoded.userId) {
       return {
         isValid: false,

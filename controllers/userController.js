@@ -6,8 +6,13 @@ export const getAllUsers = async(req, res) => {
         return res.status(200).json(users); // Return the users in JSON format
     } catch (error) {
         console.error("Error fetching users:", error);
-        return res.status(500).json({ error: "Internal server error" });
-        
+        return next({ 
+            statusCode: 500,
+            status: 'error',
+            code: 'INTERNAL_SERVER_ERROR',
+            message: "Internal server error" 
+        });
+                
     }
 }
 
@@ -25,12 +30,22 @@ export const getSalesVsEngineeringLogsData = async(req, res) => {
             const {line_chart,bar_chart,pie_chart} = await userService.getEngineeringLogsData()
             response = {line_chart,bar_chart,pie_chart};
         } else {
-            return res.status(403).json({ error: "Forbidden: You do not have permission to access this resource." });
+            return next({ 
+                status: 'error',
+                statusCode: 403,
+                message: "Forbidden: You do not have permission to access this resource.",
+                code: "INVALID_USER"
+             });
         }
         return res.status(200).json(response); // Return the data in JSON format
     } catch (error) {
         console.error("Error fetching sales vs engineering logs data:", error);
-        return res.status(500).json({ error: "Internal server error" });
+        return next({ 
+            statusCode: 500,
+            status: 'error',
+            code: 'INTERNAL_SERVER_ERROR',
+            message: "Internal server error" 
+        });
         
     }
 }
